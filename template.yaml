@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  AWS Cognito example
+
+Parameters:
+  Env:
+    Type: String
+    Description: Logical sandbox prefix
+    Default: dev
+  App:
+    Type: String
+    Description: Application name
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+
+Outputs:
