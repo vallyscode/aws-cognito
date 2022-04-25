@@ -17,5 +17,45 @@ Globals:
     Timeout: 3
 
 Resources:
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Condition: IsProdOrDev
+    Properties:
+      UserPoolName: !Sub ${Env}-user-pool
+      Schema:
+        - Name: email
+          Required: true
+          Mutable: true
+      AutoVerifiedAttributes: ["email"]
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: true
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: true
+          RequireUppercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          TemporaryPasswordValidityDays: 15
+      UsernameAttributes:
+        - email
+      UsernameConfiguration:
+        CaseSensitive: false
+      UserPoolTags:
+        Key: Project
+        Value: sm_monitoring
+
+  UserClient:
+    Type: AWS::Cognito::UserPoolClient
+    Condition: IsProdOrDev
+    Properties:
+      ClientName: !Sub ${Env}-user-pool-client
+      UserPoolId: { Ref: UserPool }
+      AccessTokenValidity: 1
+      IdTokenValidity: 1
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      GenerateSecret: false
 
 Outputs:
