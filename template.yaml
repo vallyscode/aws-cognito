@@ -19,6 +19,7 @@ Parameters:
 Globals:
   Function:
     Timeout: 3
+    MemorySize: 128
 
 Resources:
   UserPool:
@@ -59,6 +60,32 @@ Resources:
         - ALLOW_USER_SRP_AUTH
         - ALLOW_REFRESH_TOKEN_AUTH
       GenerateSecret: false
+
+  FooFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Foo feature
+      FunctionName: !Sub ${Env}-${App}-foo
+      CodeUri: app/foo/
+      Handler: handler
+      Runtime: go1.x
+      Tracing: Active
+      Tags:
+        App: !Ref App
+        Env: !Ref Env
+
+  BarFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Bar feature
+      FunctionName: !Sub ${Env}-${App}-bar
+      CodeUri: app/foo/
+      Handler: handler
+      Runtime: go1.x
+      Tracing: Active
+      Tags:
+        App: !Ref App
+        Env: !Ref Env
 
 Outputs:
   PoolId:
