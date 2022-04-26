@@ -23,7 +23,6 @@ Globals:
 Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
-    Condition: IsProdOrDev
     Properties:
       UserPoolName: !Sub ${Env}-user-pool
       Schema:
@@ -46,15 +45,14 @@ Resources:
       UsernameConfiguration:
         CaseSensitive: false
       UserPoolTags:
-        Key: Project
+        Key: App
         Value: !Ref App
 
   UserClient:
     Type: AWS::Cognito::UserPoolClient
-    Condition: IsProdOrDev
     Properties:
       ClientName: !Sub ${Env}-user-pool-client
-      UserPoolId: !Ref: UserPool
+      UserPoolId: !Ref UserPool
       AccessTokenValidity: 1
       IdTokenValidity: 1
       ExplicitAuthFlows:
