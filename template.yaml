@@ -7,10 +7,14 @@ Parameters:
   Env:
     Type: String
     Description: Logical sandbox prefix
-    Default: dev
+    Default: val
+    AllowedValues:
+      - val
+      - test
   App:
     Type: String
     Description: Application name
+    Default: cognito-example
 
 Globals:
   Function:
@@ -26,7 +30,7 @@ Resources:
         - Name: email
           Required: true
           Mutable: true
-      AutoVerifiedAttributes: ["email"]
+      AutoVerifiedAttributes: ['email']
       AdminCreateUserConfig:
         AllowAdminCreateUserOnly: true
       Policies:
@@ -43,14 +47,14 @@ Resources:
         CaseSensitive: false
       UserPoolTags:
         Key: Project
-        Value: sm_monitoring
+        Value: !Ref App
 
   UserClient:
     Type: AWS::Cognito::UserPoolClient
     Condition: IsProdOrDev
     Properties:
       ClientName: !Sub ${Env}-user-pool-client
-      UserPoolId: { Ref: UserPool }
+      UserPoolId: !Ref: UserPool
       AccessTokenValidity: 1
       IdTokenValidity: 1
       ExplicitAuthFlows:
@@ -59,3 +63,9 @@ Resources:
       GenerateSecret: false
 
 Outputs:
+  PoolId:
+    Description: User pool identifier
+    Value: !Ref UserPool
+  ClientId:
+    Description: User pool client identifier
+    Value: !Ref UserClient

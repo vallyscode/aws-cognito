@@ -1,0 +1,22 @@
+version = 0.1
+[val]
+[val.deploy]
+[val.deploy.parameters]
+stack_name = "val-cognito"
+s3_bucket = "val-sam-deployments"
+s3_prefix = "val-cognito"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
+parameter_overrides = "Env=\"val\""
+
+[test]
+[test.deploy]
+[test.deploy.parameters]
+stack_name = "val-cognito"
+s3_bucket = "val-sam-deployments"
+s3_prefix = "val-cognito"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_NAMED_IAM"
+parameter_overrides = "Env=\"test\""
