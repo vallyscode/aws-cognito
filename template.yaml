@@ -61,6 +61,21 @@ Resources:
         - ALLOW_REFRESH_TOKEN_AUTH
       GenerateSecret: false
 
+  RestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Description: Rest API for foo bar
+      StageName: !Ref Env
+      Auth:
+        Authorizers:
+          CognitoAuth:
+            UserPoolArn: !GetAtt UserPool.Arn
+            AuthType: COGNITO_USER_POOLS
+        DefaultAuthorizer: CognitoAuth
+      Tags:
+        App: !Ref App
+        Env: !Ref Env
+
   FooFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -70,6 +85,13 @@ Resources:
       Handler: handler
       Runtime: go1.x
       Tracing: Active
+      Events:
+        Foo:
+          Type: Api
+          Properties:
+            Method: get
+            Path: /foo
+            RestApiId: !Ref RestApi
       Tags:
         App: !Ref App
         Env: !Ref Env
